@@ -20,7 +20,7 @@ basepath = '/home/david/Desktop/python_fun/Audio'
 delete_dir = '/delete/' #NB needs slashes either side
 #files_to_keep = ['Audwall', 'MYRD_SYS'] # Note used yet. NB we also want to keep files that start with "PSQ"
 # A tuple of file extensions that we want to keep. all of the below are legit
-extensions_to_keep = ('.WAV', '.wav', '.lst', '.LST', '.ini', '.INI', '.pk', '.RTF', '.RT')
+extensions_to_keep = ('.WAV', '.wav', '.CMP', '.DAB', '.INF', '.lst', '.LST', '.Lst', '.ini', '.INI', '.pk', '.RTF', '.RT', '.TXT')
 
 def ourFiles (basepath):
 	files = []
