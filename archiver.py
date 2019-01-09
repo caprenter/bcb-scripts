@@ -10,6 +10,13 @@ import datetime
 Syed and David are trying to loop over a bunch of Myriad Transport files (.zip)
 to extract the data from the .LST files, turn the .WAVs into mp3s with
 tags from the LST file
+
+The transport file can contain a number of files
+.WAV - the audio
+.LST - a text file that contains up to 150 characters of text over (upto) 3 lines
+.DAB - data that could be shown on a DAB radio
+.RT - data that would show on a radio text device
+.RTF - a rich text format file with some additional information about the audio
 """
 
 """
@@ -22,10 +29,16 @@ Create an 'extracted' directory in the same place
 
 Put some Myriad 2.6.x transport files in the 'files' directory.
 
+Edit the set up variables (below) for filenames, albums etc
+
 run 
   python archiver.py
   
+The mp3s that are created should be in the same directory as this script, tagged up with suitable information.
+Filenames are a mix of a self defined prefix, a count, and a timestamp
+  
 """
+
 ##Set some variables
 # mp3 data
 fileprefix = "BradfordRocks" #for filename
@@ -49,7 +62,6 @@ for ourfile in OurFiles:
 
 #Now they are extracted we want to find all the wavs and their corresponding .LST files
 extractedFiles = listdir("extracted")
-#waveFiles = listdir("extracted")
 
 
 ##Get the data from the .LST files
@@ -63,6 +75,7 @@ print(listFiles)
 
 splitter = "      | - "
 i=1
+
 #Loop over the list files to read and process the data we need for the mp3 tags
 for file in listFiles:
 	notes = open("extracted/" + file, "r")
@@ -82,10 +95,10 @@ for file in listFiles:
 	#While we have the .LST file, we generate the name of the corresponding wav file
 	wavfile = splitext("extracted/" + file)[0] + ".WAV"
 	
-	## Create the mp3
+	## Convert the wavs to mp3	
 	title = notes[0] #use the 'first' line of the .LST file
 	#mp3 filename - created from a prefix set above (i.e. show name), a counter, a timestamp and .mp3 
-	ts = time.time()
+	ts = time.time()h 
 	st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d_%H:%M:%S')
 	mp3filename = fileprefix + "_" + str(i) + "_" + st + ".mp3"
 	print(mp3filename)
@@ -97,21 +110,3 @@ for file in listFiles:
 	cmd = 'lame --preset standard --tt "{}" --tl "{}" --ta "{}" --tc "{}" {} {} '.format(title, album, artist, comment, wavfile, mp3filename) #wavfile is input, mp3filename is output
 	subprocess.call(cmd, shell=True)
 	i +=1
-
-#for filename in OurFiles:
-#    print '%20s  %s' % (filename, zipfile.is_zipfile(filename))
-
-#for ourfile in OurFiles:
-#	print ourfile
-#	z = zipfile.ZipFile("files/" + ourfile, "r")
-	
-	
-	
-"""	
-# Convert the wavs to mp3	
-for file in waveFiles:
-    if file.endswith(".WAV"):
-		print(file)
-		cmd = 'lame --preset standard %s' % 'extracted/' + file
-		subprocess.call(cmd, shell=True)
-"""
