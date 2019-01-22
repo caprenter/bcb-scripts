@@ -50,10 +50,10 @@ Filenames are a mix of a self defined prefix, a count, and a timestamp
 # mp3 data
 #fileprefix = "BradfordRocks" #for filename
 #album = "Bradford Rocks"
-fileprefix = "OneToOne" #for filename
-album = "One To One"
+fileprefix = "OurTopTen" #for filename
+album = "Our Top Ten"
 artist = "BCB Radio 106.6FM" # for artist tag
-destination_directory = "/OneToOne_done/"
+destination_directory = "/OurTopTen_done/"
 basepath = "/home/david/Documents/BCB/Scripts/bcb-scripts"
 
 
@@ -140,8 +140,8 @@ def create_mp3 (file, album, artist):
 	## Convert the wavs to mp3
 	#title
 	title = notes[0] #use the 'first' line of the .LST file
-	if "One to One" not in title:
-		title = "One to One - " + title
+	if "Our Top Ten" not in title:
+		title = "Our Top Ten - " + title
 		
 	#mp3 filename - created from a prefix set above (i.e. show name), a counter, a timestamp and .mp3 
 	ts = time.time()
