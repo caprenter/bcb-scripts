@@ -156,7 +156,7 @@ def create_mp3 (file, album, artist):
 	comment = ', '.join(notes) #uses rest of list items text for the comment
 	
 	#Run the command to make the mp3 using lame
-	cmd = 'lame --preset standard --tt "{}" --tl "{}" --ta "{}" --tv TPE2="{}" --tc "{}" {} {} '.format(title, album, artist, album_artist, comment, wavfile, mp3filename) #wavfile is input, mp3filename is output
+	cmd = 'lame --preset standard --tt "{}" --ty "{}" --tl "{}" --ta "{}" --tv TPE2="{}" --tc "{}" {} {} '.format(title, "2016", album, artist, album_artist, comment, wavfile, mp3filename) #wavfile is input, mp3filename is output
 	subprocess.call(cmd, shell=True)
 	return mp3filename
 	
