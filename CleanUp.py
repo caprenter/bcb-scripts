@@ -16,11 +16,11 @@ Usage:
 """
 
 # Set some variables
-basepath = '/home/david/Desktop/python_fun/Audio'
-delete_dir = '/delete/' #NB needs slashes either side
+basepath = '/mnt/myriad/Audio'
+delete_dir = '/deleted/' #NB needs slashes either side
 #files_to_keep = ['Audwall', 'MYRD_SYS'] # Note used yet. NB we also want to keep files that start with "PSQ"
 # A tuple of file extensions that we want to keep. all of the below are legit
-extensions_to_keep = ('.WAV', '.wav', '.CMP', '.DAB', '.INF', '.lst', '.LST', '.Lst', '.ini', '.INI', '.pk', '.RTF', '.RT', '.TXT')
+extensions_to_keep = ('.WAV', '.wav', '.CMP', '.DAB', '.INF', '.lst', '.LST', '.Lst', '.ini', '.INI', '.pk', '.RTF', '.RT', '.TXT', '.db')
 
 def ourFiles (basepath):
 	files = []
@@ -33,7 +33,7 @@ def ourFiles (basepath):
 			files.append(fname)
 
 	return (files)
-	
+
 def moveFiles (files, basepath, delete_dir):
 	for file in files:
 		os.rename(basepath + '/' + file, basepath + delete_dir + file)
@@ -58,7 +58,7 @@ print(badFiles)
 
 # Move the bad files to the 'delete' directory
 moveFiles (badFiles, basepath, delete_dir)
-	
+
 ## Task 2 ##
 # Second task is to filter out bad WAV files by filename
 
@@ -74,7 +74,8 @@ for file in wavs:
 	if file.endswith(wav_ex): #let WAV and wav through
 		if not re.match(r'(^PSQ)', file): #Lets anything that is not PSQxxxx through
 			if not len(file) == 12:  #lets anything that is 12 charachters long through MYR12345.WAV for example
-				if not re.match(r'(^(MYR|myr)[0-9]{5}(\.WAV$|\.wav$))', file):	# MYR, has 5 digits and ends with .WAV or .wav
+				badwavs.append(file)
+			elif not re.match(r'(^(M|m)(Y|y)(R|r)[0-9]{5}(\.WAV$|\.wav$))', file):	# MYR, has 5 digits and ends with .WAV or .wav
 					badwavs.append(file)
 
 print(badwavs)
@@ -82,5 +83,3 @@ print(badwavs)
 # Move the bad wavs to the 'delete' directory
 moveFiles (badwavs, basepath, delete_dir)
 
-	
-	
