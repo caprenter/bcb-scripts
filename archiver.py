@@ -24,11 +24,18 @@ The transport file can contain a number of files
 
 """
 USAGE
-make sure you have lame installed and that it's in your path 
 
-Place this file in a directory.
-Create a 'files' directory in the same place
-Create an 'extracted' directory in the same place
+Dependencies
+	Make sure you have lame installed and that it's in your path 
+	You may also need sndfile-convert
+
+Directories
+	Place this file in a directory.
+	Create an 'extracted' directory.
+	Create a 'done' directory
+	Create a 'files' directory in the same place. 
+	Create a converted_zip directory inside the files directory.
+
 
 Put some Myriad 2.6.x transport files in the 'files' directory.
 
@@ -41,20 +48,18 @@ RUN WITH LOGGING
   This will write the print statements to the screen and to a file called log.txt
   python3 -u archiver.py | tee log.txt 
   
-The mp3s that are created should be in the same directory as this script, tagged up with suitable information.
+The mp3s that are created should be in the 'done' directory, tagged up with suitable information.
 Filenames are a mix of a self defined prefix, a count, and a timestamp
   
 """
 
 ##Set some variables
 # mp3 data
-#fileprefix = "BradfordRocks" #for filename
-#album = "Bradford Rocks"
-fileprefix = "OurTopTen" #for filename
-album = "Our Top Ten"
+fileprefix = "CouldntCareLess" #for filename
+album = "Couldn't Care Less"
 artist = "BCB Radio 106.6FM" # for artist tag
-destination_directory = "/OurTopTen_done/"
-basepath = "/home/david/Documents/BCB/Scripts/bcb-scripts"
+destination_directory = "/done/"
+basepath = "/home/david/Documents/BCB/bcb-scripts"
 
 
 def unzipfile (ourfile):
@@ -134,14 +139,15 @@ def create_mp3 (file, album, artist):
 	#While we have the .LST file, we generate the name of the corresponding wav file
 	#NB .LST file may not have the same sort of name as the wav file - we can have lowercase myr and wav
 	wavfile = find_wav_file(filename_without_extension)
+	wavfile2 = "F" + filename_without_extension + ".wav"
 	print ("Found wav file: " + str(wavfile))
 
 	
 	## Convert the wavs to mp3
 	#title
 	title = notes[0] #use the 'first' line of the .LST file
-	if "Our Top Ten" not in title:
-		title = "Our Top Ten - " + title
+	if "Couldn't Care Less" not in title:
+		title = "Couldn't Care Less - " + title
 		
 	#mp3 filename - created from a prefix set above (i.e. show name), a counter, a timestamp and .mp3 
 	ts = time.time()
@@ -155,8 +161,12 @@ def create_mp3 (file, album, artist):
 	#notes.pop(0) #removes the first item from the list which we have already used for the title
 	comment = ', '.join(notes) #uses rest of list items text for the comment
 	
+	#This is needed to make lame  work on these files (on this machine at least) against error: Unsupported data format: 0x0011 Can't init infile
+	cmd = 'sndfile-convert -pcm16 {} {}'.format(wavfile, wavfile2) #wavfile is input, wavfile2 is output
+	subprocess.call(cmd, shell=True)
+
 	#Run the command to make the mp3 using lame
-	cmd = 'lame --preset standard --tt "{}" --tl "{}" --ta "{}" --tv TPE2="{}" --tc "{}" {} {} '.format(title, album, artist, album_artist, comment, wavfile, mp3filename) #wavfile is input, mp3filename is output
+	cmd = 'lame --preset standard --tt "{}" --tl "{}" --ta "{}" --tv TPE2="{}" --tc "{}" {} {} '.format(title, album, artist, album_artist, comment, wavfile2, mp3filename) #wavfile is input, mp3filename is output
 	subprocess.call(cmd, shell=True)
 	return mp3filename
 	
